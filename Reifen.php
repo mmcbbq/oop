@@ -43,6 +43,12 @@ class Reifen
         $this->letztePos = $letztePos;
     }
 
+    public function profilAbnutzung()
+    {
+     //alle 10000km reduziert sich das Profil um 0,1mm
+    }
+
+
 
 
 
