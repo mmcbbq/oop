@@ -7,32 +7,27 @@ class Auto
     private int $geschwindigkeit = 0;
     private string $fahrer;
     private Beifahrer|null $beifahrer;
-    private int $kmstand;
-    private string $reifen_vorne_links;
-    private string $reifen_vorne_rechts;
-    private string $reifen_hinten_links;
-    private string $reifen_hinten_rechts;
+    private float $kmstand;
+    private array $standort;
+
+    private array $reifen;
 
     /**
      * @param string $fahrer
-     * @param string $beifahrer
      * @param int $kmstand
-     * @param string $reifen_vorne_links
-     * @param string $reifen_vorne_rechts
-     * @param string $reifen_hinten_links
-     * @param string $reifen_hinten_rechts
+     * @param string $marke
+     * @param Beifahrer|null $beifahrer
+     * @param array $standort
+     * @param Reifen[] $reifen
      */
-    public function __construct(string $fahrer, int $kmstand, string $marke, Beifahrer $beifahrer = null, string $reifen_vorne_links = "sommer", string $reifen_vorne_rechts = "sommer", string $reifen_hinten_links = "sommer", string $reifen_hinten_rechts = "sommer")
+    public function __construct(string $fahrer, int $kmstand, string $marke,array $reifen, Beifahrer $beifahrer = null, array $standort = ["x" => 0, "y" => 0])
     {
-
+        $this->standort = $standort;
         $this->fahrer = $fahrer;
         $this->marke = $marke;
         $this->beifahrer = $beifahrer;
         $this->kmstand = $kmstand;
-        $this->reifen_vorne_links = $reifen_vorne_links;
-        $this->reifen_vorne_rechts = $reifen_vorne_rechts;
-        $this->reifen_hinten_links = $reifen_hinten_links;
-        $this->reifen_hinten_rechts = $reifen_hinten_rechts;
+        $this->reifen = $reifen;
     }
 
     /**
@@ -50,7 +45,8 @@ class Auto
     {
         return $this->geschwindigkeit;
     }
-    public function beschleunigen(int $kmh) : void
+
+    public function beschleunigen(int $kmh): void
     {
         $this->geschwindigkeit += $kmh;
         if ($this->geschwindigkeit > 250) {
@@ -62,17 +58,17 @@ class Auto
     public function bremsen(int $kmh): void
     {
         $this->geschwindigkeit -= $kmh;
-        if ($this->geschwindigkeit < 0){
+        if ($this->geschwindigkeit < 0) {
             $this->geschwindigkeit = 0;
         }
     }
 
     public function einsteigenBeifahrer(Beifahrer $beifahrer): bool
     {
-        if ($this->geschwindigkeit == 0 and $this->beifahrer == null){
+        if ($this->geschwindigkeit == 0 and $this->beifahrer == null) {
             $this->beifahrer = $beifahrer;
             return true;
-        } else{
+        } else {
             return false;
         }
     }
@@ -87,10 +83,10 @@ class Auto
 
     public function aussteigenBeifahrer(): bool
     {
-        if ($this->geschwindigkeit == 0){
+        if ($this->geschwindigkeit == 0) {
             $this->beifahrer = null;
             return true;
-        } else{
+        } else {
             return false;
         }
 
@@ -104,25 +100,74 @@ class Auto
         return $this->marke;
     }
 
-    public function vollbremsung():void
+    public function vollbremsung(): void
     {
-        $this->geschwindigkeit =0;
+        $this->geschwindigkeit = 0;
     }
 
-    public function fahren(int $stunden):void
+    public function fahren(array $ziel): void
     {
-        $this->kmstand += $this->geschwindigkeit * $stunden;
+        var_dump($this->getBeifahrer());
+        $this->kmstand += $this->geschwindigkeit * $this->berechneFahrzeit($this->berechneStrecke($ziel));
+        $this->setStandort($ziel);
     }
 
     /**
      * @return int
      */
-    public function getKmstand(): int
+    public function getKmstand(): float
     {
         return $this->kmstand;
     }
 
+    /**
+     * @return array
+     */
+    public function getStandort(): array
+    {
+        return $this->standort;
+    }
+
+    /**
+     * @param array $standort
+     */
+    public function setStandort(array $standort): void
+    {
+        $this->standort = $standort;
+    }
+
+
+    public function berechneStrecke(array $ziel): float
+    {
+        if ($this->getStandort()['x'] >= $ziel['x']) {
+            $a = $this->getStandort()['x'] - $ziel['x'];
+        } elseif ($this->getStandort()['x'] < $ziel['x']) {
+            $a = $ziel['x'] - $this->getStandort()['x'];
+        }
+        if ($this->getStandort()['y'] >= $ziel['y']) {
+            $b = $this->getStandort()['y'] - $ziel['y'];
+        } elseif ($this->getStandort()['y'] < $ziel['y']) {
+            $b = $ziel['y'] - $this->getStandort()['y'];
+        }
+
+        return sqrt(($a ** 2 + $b ** 2));
+    }
+
+    public function berechneFahrzeit(float $strecke): float
+    {
+        return $strecke / $this->geschwindigkeit;
+    }
+
+    public function fahrezumStandort(array $ziel): void
+    {
+        $akge = $this->geschwindigkeit;
+        if ($akge > 50){
+            $this->bremsen($akge - 50);
+        } else{
+            $this->beschleunigen(50 - $akge);
+        }
+        $this->fahren($ziel);
+        $this->vollbremsung();
+    }
 }
-
-
 
