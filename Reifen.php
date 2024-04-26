@@ -9,7 +9,6 @@ class Reifen
     private float $gefahreneKm;
 
 
-
     /**
      * @param int $id
      * @param string $type
@@ -17,7 +16,7 @@ class Reifen
      * @param float $gefahreneKm
      * @param string|null $letztePos
      */
-    public function __construct(int $id, string $type, float $profile,float $gefahreneKm =0, string $letztePos= null)
+    public function __construct(int $id, string $type, float $profile, float $gefahreneKm = 0, string $letztePos = null)
     {
         $this->id = $id;
         $this->type = $type;
@@ -30,7 +29,7 @@ class Reifen
      * @param float $km
      * @return void
      */
-    public function addGefahreneKm(float $km):void
+    public function addGefahreneKm(float $km): void
     {
 
     }
@@ -45,13 +44,7 @@ class Reifen
 
     public function profilAbnutzung()
     {
-     //alle 10000km reduziert sich das Profil um 0,1mm
+        //alle 10000km reduziert sich das Profil um 0,1mm
     }
-
-
-
-
-
-
 
 }

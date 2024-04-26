@@ -7,15 +7,15 @@ $beifahrer1 = new Beifahrer("Donald","Trump",72, ["x"=>200,'y'=> 200], ["x"=>39,
 $beifahrer2 = new Beifahrer("Bill","Clinton",75, ["x"=>-200,'y'=> 300], ["x"=>500,'y'=> 700]);
 $beifahrer3 = new Beifahrer("Obama","Barack",72, ["x"=>25,'y'=>-12], ["x"=>-1000,'y'=> -1000]);
 
-$reifen1 =new Reifen(1,"sommer",5,);
-$reifen2 =new Reifen(2,"sommer",5,);
-$reifen3 =new Reifen(3,"sommer",5,);
-$reifen4 =new Reifen(4,"sommer",5,);
-
+$reifen1 =new Reifen(1,"sommer",5);
+$reifen2 =new Reifen(2,"sommer",5);
+$reifen3 =new Reifen(3,"sommer",5);
+$reifen4 =new Reifen(4,"sommer",5);
+$ersatz = new Reifen(5,"winter",10);
 $reifen_array=["vorne links"=>$reifen1,"vorne rechts"=>$reifen2, 'hinten links'=>$reifen3,'hinten rechts'=>$reifen4];
 
 $auto = new Auto("Chatgpt", 1000,"Ford",$reifen_array);
-
+$auto->wechselReifen("vorne links",$ersatz);
 var_dump($auto);
 
 ///** @var Beifahrer[] $fahrten */

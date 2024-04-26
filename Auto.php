@@ -27,7 +27,11 @@ class Auto
         $this->marke = $marke;
         $this->beifahrer = $beifahrer;
         $this->kmstand = $kmstand;
-        $this->reifen = $reifen;
+
+        $this->reifen = ["vorne links"=> Null ,"vorne rechts"=>Null, 'hinten links'=>Null,'hinten rechts'=>Null];
+        foreach ($reifen as $key=>$reife) {
+            $this->wechselReifen($key ,$reife);
+        }
     }
 
     /**
@@ -168,6 +172,37 @@ class Auto
         }
         $this->fahren($ziel);
         $this->vollbremsung();
+    }
+
+    /**
+     * @return array
+     */
+    public function getReifen(): array
+    {
+        return $this->reifen;
+    }
+
+    /**
+     * @param array $reifen
+     */
+    public function setReifen(array $reifen): void
+    {
+        $this->reifen = $reifen;
+    }
+
+
+
+    /**
+     * @param string $pos
+     * @param Reifen $reifen
+     * @return void
+     */
+    public function wechselReifen(string $pos, Reifen $reifen): void
+    {
+        $reifenSatz = $this->getReifen();
+        $reifen->setLetztePos($pos);
+        $reifenSatz[$pos] = $reifen;
+        $this->setReifen($reifenSatz);
     }
 }
 
